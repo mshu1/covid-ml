@@ -64,7 +64,7 @@ class ConvLSTMNet_multiGPU(nn.Module):
     #This defines the structure of the NN.
     def __init__(self, convLSTM_fig = None):
         super(ConvLSTMNet_multiGPU, self).__init__()
-        self.clstm = convlstm.ConvLSTM(input_dim=3, hidden_dim=[32, 16], kernel_size=(7, 7), num_layers=2, batch_first=True, bias=True,return_all_layers=False)
+        self.clstm = convlstm.ConvLSTM(input_dim=1, hidden_dim=[32, 16], kernel_size=(7, 7), num_layers=2, batch_first=True, bias=True,return_all_layers=False)
         # self.dev1 = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         # self.dev2 = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
         # self.clstm = i_x.to(self.dev2)
@@ -90,7 +90,7 @@ class ConvLSTMNet_multiGPU(nn.Module):
         for i in range(net_opt.max_days):
             out_x = self.embedding(t_x[:,i])
             self.lstm.flatten_parameters()
-            out_x, self.hidden = self.lstm(out_x.view(net_opt.batch_size, 1, -1), self.hidden)
+            out_x, self.hidden = self.lstm(out_x.view(i_x.shape[0], 1, -1), self.hidden)
         out_x = torch.squeeze(out_x, dim=1)
         x = torch.cat((i_x, out_x), dim=1)
         x = F.relu(self.fc1(x))
