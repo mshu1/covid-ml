@@ -298,62 +298,12 @@ def main():
     model = nn.DataParallel(model)
     model.cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=args['lr'])
-    # data = dl.read_pickle('Admit_Date.pickle')
-    # data = dl.prepare_fix_batch(args['iter_size'], 2, 'Admit_Date.pickle', args['batch_size'])
-    # train_debug2(data[0], model, optimizer, 2)
-    # data = dl.read_pickle('data_process/edit-0108/Intubation_Date_Predict_NEW.pickle', max_T=args['max_T'], admit=False)
-    # train_split, eval_split, test_split = dl.make_train_test_split(data)
-    # pref = 'data/Discharge_Patched10/'
     print('Mask: ', args['mask'], 'Shadow: ', args['porp'])
     print('Pref: ', args['pref'])
     pref = args['pref']
     train_split, eval_split, test_split = dl.load_train_test_split(pref+'train_split.pickle', pref+'eval_split.pickle',pref+'test_split.pickle')
     print(len(train_split['E']),len(test_split['E']), len(eval_split['E']))
     train_debug(train_split, eval_split, test_split, model, optimizer, k=args['k'])
-
-
-# def test():
-#     model = models.ConvLSTMNet_multiGPU()
-#     model = nn.DataParallel(model)
-#     # model = DDP(model)
-#     model.cuda()
-#     # optimizer = optim.SGD(model.parameters(), lr=args['lr'], momentum=args['momentum'])
-#     optimizer = torch.optim.Adam(model.parameters(), lr=args['lr'])
-#     # data = dl.read_pickle('Admit_Date.pickle')
-#     # train_strat(data, model, optimizer)
-#     test = []
-#     for i in range(1):
-#         test_t  = torch.ones([60, 2, 1, 224, 224]).cuda()
-#         ltest_t  = torch.ones([60, 88, 1]).cuda()
-#         output1 = model([test_t, ltest_t])
-#         output2 = model([test_t, ltest_t])
-#         print(output1.shape)
-#         output = torch.cat([output1, output2], dim=0)
-#         print(output.shape)
-#         test.append(output)
-
-# def train_debug2(data, model, optimizer, k):
-#     model.train()
-#     f = 10
-#     loss = 0
-#     batch_list = []
-#     for i, x_list in enumerate(data['X']):
-#         batch_list.append(read_fix_batch(args['addr'], x_list, k, True, None))
-#     X_t = torch.stack(batch_list)
-#     loss_list = []
-#     for i in range(args['epochs']):
-#         # adjust_learning_rate(optimizer, i)
-#         for j in range(args['iter_size']):
-#             epoch_loss = train_debug_cycle(data, X_t, model, optimizer)
-#             loss += epoch_loss
-#             print(epoch_loss)
-#             if j % f == f-1:
-#                 print('Train Epoch: {}/{} Iter: {}/{} Loss: {:.6f}'.format(
-#                 i, args['epochs'], int(j/f), int(args['iter_size']/f), loss/f))
-#                 loss_list.append(loss/f)
-#                 loss = 0
-#     with open('loss.pickle', 'wb') as handle:
-#         pickle.dump(loss_list, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 ##############################################
 
