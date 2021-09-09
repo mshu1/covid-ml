@@ -114,22 +114,3 @@ def stratified_filter(data, E_pos, E_neg, E_pos_num, E_neg_num):
                     'L': L}
     return data_filtered
 
-# def stratified_filter(data, E_pos, E_neg, E_pos_num, E_neg_num):
-#     X, E, T, L = data['X_ID'], data['E'], data['T'], data['X_LSTM']
-#     pos_indices = np.random.choice(range(np.size(E_pos)), size=E_pos_num, replace=False)
-#     neg_indices = np.random.choice(range(np.size(E_neg)), size=E_neg_num, replace=False)
-#     batch_indices = np.concatenate([E_pos[0][pos_indices], E_neg[0][neg_indices]])
-#     batch_indices.sort()
-#     X, E, T, L = X[batch_indices], E[batch_indices], T[batch_indices], L[batch_indices]
-#     test_split = {'X': X,
-#                     'E': E,
-#                     'T': T,
-#                     'L': L}
-#     X_train, E_train, T_train, L_train = np.delete(X, batch_indices), np.delete(E, batch_indices), np.delete(T, batch_indices), np.delete(L, batch_indices)
-#     train_split = {'X': X_train,
-#                     'E': E_train,
-#                     'T': T_train,
-#                     'L': L_train}
-#     return data_filtered
-
-
