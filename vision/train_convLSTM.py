@@ -82,56 +82,6 @@ def adjust_learning_rate(optimizer, epoch):
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
-# def train_cycle(epoch, data, model, optimizer):
-#     optimizer.zero_grad()
-#     X, E, T, L = data['X'], data['E'], data['T'], data['L']
-#     E, L = torch.tensor(E), torch.tensor(L).float().unsqueeze(-1)
-#     X_t = read_images_to_batch(args['addr'], X)
-#     if args['cuda']:
-#         E = E.cuda()
-#         X_t = X_t.cuda()
-#         L_t = L.cuda()
-#     output = model([X_t, L_t])
-#     # loss = -(torch.sum(E * (stacked_tensor - torch.log(torch.cumsum(torch.exp(stacked_tensor), dim=0)))))/torch.sum(E, dim=0)[0]
-#     neg_loss_per_instance = output - torch.log(torch.cumsum(torch.exp(output), axis=0))
-#     loss = -torch.sum(E*neg_loss_per_instance)/(torch.sum(E)+torch.finfo(torch.float32).eps)
-#     if (torch.isnan(loss)):
-#         print('nan detected')
-#         exit()
-#     loss.backward()
-#     optimizer.step()
-#     return loss.detach().cpu().numpy()
-
-# def train_cum_cycle(epoch, data, model, optimizer):
-#     optimizer.zero_grad()
-#     X, E, T, L = data['X'], data['E'], data['T'], data['L']
-#     E, L = torch.tensor(E), torch.tensor(L).float().unsqueeze(-1)
-#     output_list = []
-#     for i, x_list in enumerate(X):
-#         X_t = read_npy_to_batch(args['addr'], x_list).unsqueeze(0)
-#         L_t = L[i,:].unsqueeze(0)
-#         if args['cuda']:
-#         # E = E.cuda()
-#             X_t = X_t.cuda(1)
-#             L_t = L_t.cuda(1)
-#         o = model([X_t, L_t])
-#         output_list.append(o)
-#         # print(output)
-#         # exit()
-#     output = torch.stack(output_list, dim=0)
-#     if args['cuda']:
-#         E = E.cuda(0)
-#     # loss = -(torch.sum(E * (stacked_tensor - torch.log(torch.cumsum(torch.exp(stacked_tensor), dim=0)))))/torch.sum(E, dim=0)[0]
-#     neg_loss_per_instance = output - torch.log(torch.cumsum(torch.exp(output), axis=0))
-#     loss = -torch.sum(E*neg_loss_per_instance)/(torch.sum(E)+torch.finfo(torch.float32).eps)
-#     if (torch.isnan(loss)):
-#         print('nan detected')
-#         exit()
-#     loss.backward()
-#     optimizer.step()
-#     del X_t, L_t, E
-#     torch.cuda.empty_cache()
-#     return loss.detach().cpu().numpy()
 
 def train_rand_cycle(data, model, optimizer, k, loss_mode = 'Neg', random_images=True):
     model.train()
